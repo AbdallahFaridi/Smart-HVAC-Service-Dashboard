@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="AirFlex Operations Dashboard for HVAC dispatch, service requests, maintenance, and technician performance.">
+  <title>AirFlex Operations Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-bg" aria-hidden="true">
+    <span class="grid-lines"></span>
+    <span class="pulse pulse-one"></span>
+    <span class="pulse pulse-two"></span>
+  </div>
+
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar" aria-label="Primary navigation">
+      <div class="brand">
+        <a class="brand-link" href="https://www.airflexltd.com/" target="_blank" rel="noreferrer" aria-label="AirFlex Heating and Cooling website">
+          <span class="brand-logo" aria-hidden="true">
+            <svg viewBox="0 0 64 64" role="img">
+              <path d="M32 4 56 18v28L32 60 8 46V18L32 4Z"></path>
+              <path d="M19 41 31 15h5l-3 16h12L29 50h-5l4-9h-9Z"></path>
+            </svg>
+          </span>
+          <span class="brand-copy">
+            <strong>AirFlex</strong>
+            <small>Heating & Cooling Ltd</small>
+          </span>
+        </a>
+        <button class="icon-button sidebar-toggle" id="collapseSidebar" type="button" aria-label="Collapse sidebar">
+          <span class="icon">panel-left</span>
+        </button>
+      </div>
+
+      <nav class="nav-links">
+        <a href="#overview" class="nav-link active" data-section-link>
+          <span class="icon">dashboard</span>
+          <span>Operations</span>
+        </a>
+        <a href="#requests" class="nav-link" data-section-link>
+          <span class="icon">clipboard</span>
+          <span>Service Desk</span>
+        </a>
+        <a href="#dispatch" class="nav-link" data-section-link>
+          <span class="icon">route</span>
+          <span>Dispatch</span>
+        </a>
+        <a href="#maintenance" class="nav-link" data-section-link>
+          <span class="icon">shield</span>
+          <span>Maintenance</span>
+        </a>
+        <a href="#analytics" class="nav-link" data-section-link>
+          <span class="icon">chart</span>
+          <span>Analytics</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-card">
+        <div class="status-light online"></div>
+        <div>
+          <strong>System online</strong>
+          <small>Dispatch sync every 45 sec</small>
+        </div>
+      </div>
+
+      <div class="sidebar-footer">
+        <small>Owner: Lindon</small>
+        <strong>Developed by Abdallah Faridi</strong>
+      </div>
+    </aside>
+
+    <div class="page">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="hamburger" id="mobileMenu" type="button" aria-label="Open navigation" aria-expanded="false">
+            <span></span>
+            <span></span>
+            <span></span>
+          </button>
+          <div>
+            <p class="eyebrow">AirFlex Operations Dashboard</p>
+            <h1>Smart HVAC Command Center</h1>
+          </div>
+        </div>
+
+        <div class="topbar-meta">
+          <div class="clock-card">
+            <span id="liveClock">--:--</span>
+            <small id="liveDate">Loading date</small>
+          </div>
+          <a class="contact-chip" href="tel:+14164397155">
+            <span class="icon">phone</span>
+            +1 416 439 7155
+          </a>
+          <button class="icon-button" id="themeToggle" type="button" aria-label="Toggle dark mode">
+            <span class="theme-orbit" aria-hidden="true"></span>
+          </button>
+        </div>
+      </header>
+
+      <main>
+        <section class="hero-dashboard reveal" id="overview">
+          <div class="hero-copy">
+            <p class="eyebrow">Greater Toronto Area dispatch control</p>
+            <h2>Commercial, residential, and emergency HVAC operations in one live workspace.</h2>
+            <p>Track calls from Scarborough to Durham, assign licensed technicians, and monitor maintenance commitments for AirFlex Heating & Cooling Ltd.</p>
+            <div class="hero-actions">
+              <button class="primary-button" id="newCallButton" type="button">
+                <span class="icon">plus</span>
+                New Service Call
+              </button>
+              <button class="secondary-button" id="exportReport" type="button">
+                <span class="icon">download</span>
+                Export Ops Report
+              </button>
+            </div>
+          </div>
+
+          <div class="hvac-illustration" aria-hidden="true">
+            <svg viewBox="0 0 360 260">
+              <defs>
+                <linearGradient id="unitGrad" x1="0" x2="1">
+                  <stop offset="0" stop-color="#0ea5e9"></stop>
+                  <stop offset="1" stop-color="#22c55e"></stop>
+                </linearGradient>
+              </defs>
+              <rect x="38" y="76" width="232" height="126" rx="18" class="unit-body"></rect>
+              <rect x="70" y="105" width="78" height="62" rx="12" class="unit-screen"></rect>
+              <circle cx="210" cy="136" r="42" class="fan-ring"></circle>
+              <path class="fan-blade" d="M210 103c19 18 20 34 0 66-18-18-20-34 0-66Z"></path>
+              <path class="fan-blade blade-two" d="M177 136c18-19 34-20 66 0-18 18-34 20-66 0Z"></path>
+              <path class="air-line line-one" d="M283 96c28-9 44-1 50 16"></path>
+              <path class="air-line line-two" d="M282 132c36-8 58 2 65 28"></path>
+              <path class="air-line line-three" d="M282 169c24 4 37 15 39 34"></path>
+              <rect x="62" y="219" width="160" height="12" rx="6" class="shadow-line"></rect>
+            </svg>
+          </div>
+        </section>
+
+        <section class="stats-grid reveal" aria-label="Live dashboard statistics">
+          <article class="stat-card glass">
+            <div class="stat-top">
+              <span class="stat-icon blue"><span class="icon">clipboard</span></span>
+              <small>All calls</small>
+            </div>
+            <strong class="counter" data-stat="totalRequests">0</strong>
+            <p>Total service requests</p>
+          </article>
+          <article class="stat-card glass">
+            <div class="stat-top">
+              <span class="stat-icon red"><span class="icon">alert</span></span>
+              <small>Live</small>
+            </div>
+            <strong class="counter" data-stat="emergencyCalls">0</strong>
+            <p>Emergency calls</p>
+          </article>
+          <article class="stat-card glass">
+            <div class="stat-top">
+              <span class="stat-icon green"><span class="icon">check</span></span>
+              <small>Today</small>
+            </div>
+            <strong class="counter" data-stat="completedJobs">0</strong>
+            <p>Completed jobs</p>
+          </article>
+          <article class="stat-card glass">
+            <div class="stat-top">
+              <span class="stat-icon cyan"><span class="icon">users</span></span>
+              <small>Field</small>
+            </div>
+            <strong class="counter" data-stat="activeTechnicians">0</strong>
+            <p>Active technicians</p>
+          </article>
+          <article class="stat-card glass">
+            <div class="stat-top">
+              <span class="stat-icon violet"><span class="icon">calendar</span></span>
+              <small>30 days</small>
+            </div>
+            <strong class="counter" data-stat="maintenanceRate">0%</strong>
+            <p>Maintenance completion</p>
+          </article>
+        </section>
+
+        <section class="ops-grid">
+          <article class="panel live-map reveal">
+            <div class="section-heading">
+              <div>
+                <p class="eyebrow">Technician GPS simulation</p>
+                <h3>GTA Field Coverage</h3>
+              </div>
+              <span class="badge online-badge">Live tracking</span>
+            </div>
+            <div class="map-surface" id="gpsMap"></div>
+          </article>
+
+          <article class="panel feed-panel reveal">
+            <div class="section-heading">
+              <div>
+                <p class="eyebrow">Real-time activity</p>
+                <h3>Operations Feed</h3>
+              </div>
+              <button class="mini-button" id="pauseFeed" type="button">Pause</button>
+            </div>
+            <div class="activity-feed" id="activityFeed"></div>
+          </article>
+        </section>
+
+        <section class="panel requests-panel reveal" id="requests">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Service desk</p>
+              <h3>Service Requests</h3>
+            </div>
+            <div class="request-actions">
+              <span class="badge dispatch-badge" id="visibleRequestCount">0 visible</span>
+              <button class="secondary-button compact" id="clearFilters" type="button">Clear</button>
+            </div>
+          </div>
+
+          <div class="toolbar">
+            <label class="search-box">
+              <span class="icon">search</span>
+              <input id="searchInput" type="search" placeholder="Search customer, city, equipment, technician">
+            </label>
+            <select id="statusFilter" aria-label="Filter by status">
+              <option value="all">All statuses</option>
+              <option value="New">New</option>
+              <option value="Dispatched">Dispatched</option>
+              <option value="On Site">On Site</option>
+              <option value="Waiting Parts">Waiting Parts</option>
+              <option value="Completed">Completed</option>
+            </select>
+            <select id="priorityFilter" aria-label="Filter by priority">
+              <option value="all">All priorities</option>
+              <option value="Emergency">Emergency</option>
+              <option value="High">High</option>
+              <option value="Medium">Medium</option>
+              <option value="Scheduled">Scheduled</option>
+            </select>
+            <select id="typeFilter" aria-label="Filter by service type">
+              <option value="all">All service types</option>
+              <option value="Commercial">Commercial</option>
+              <option value="Residential">Residential</option>
+              <option value="Maintenance">Maintenance</option>
+            </select>
+          </div>
+
+          <div class="skeleton-table" id="tableSkeleton" aria-hidden="true">
+            <span></span><span></span><span></span><span></span>
+          </div>
+
+          <div class="request-list" id="requestList"></div>
+        </section>
+
+        <section class="dispatch-grid" id="dispatch">
+          <article class="panel schedule-panel reveal">
+            <div class="section-heading">
+              <div>
+                <p class="eyebrow">Drag-and-drop scheduling</p>
+                <h3>Technician Dispatch Board</h3>
+              </div>
+              <button class="primary-button compact" id="autoAssign" type="button">
+                <span class="icon">spark</span>
+                Auto assign
+              </button>
+            </div>
+            <div class="schedule-board" id="scheduleBoard"></div>
+          </article>
+
+          <article class="panel team-panel reveal">
+            <div class="section-heading">
+              <div>
+                <p class="eyebrow">Team capacity</p>
+                <h3>Technician Performance</h3>
+              </div>
+            </div>
+            <div class="team-list" id="teamList"></div>
+          </article>
+        </section>
+
+        <section class="panel maintenance-panel reveal" id="maintenance">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Preventive care</p>
+              <h3>Maintenance Activity Tracker</h3>
+            </div>
+            <span class="badge warning-badge">3 reminders due</span>
+          </div>
+          <div class="maintenance-grid" id="maintenanceGrid"></div>
+        </section>
+
+        <section class="analytics-grid" id="analytics">
+          <article class="panel chart-panel reveal">
+            <div class="section-heading">
+              <div>
+                <p class="eyebrow">Monthly service demand</p>
+                <h3>Service Calls</h3>
+              </div>
+            </div>
+            <canvas id="serviceCallsChart" height="260"></canvas>
+            <div class="chart-fallback" data-fallback="serviceCallsChart"></div>
+          </article>
+
+          <article class="panel chart-panel reveal">
+            <div class="section-heading">
+              <div>
+                <p class="eyebrow">Revenue simulation</p>
+                <h3>Revenue Trend</h3>
+              </div>
+            </div>
+            <canvas id="revenueChart" height="260"></canvas>
+            <div class="chart-fallback" data-fallback="revenueChart"></div>
+          </article>
+
+          <article class="panel chart-panel reveal">
+            <div class="section-heading">
+              <div>
+                <p class="eyebrow">Job type split</p>
+                <h3>Emergency vs Scheduled</h3>
+              </div>
+            </div>
+            <canvas id="jobMixChart" height="260"></canvas>
+            <div class="chart-fallback" data-fallback="jobMixChart"></div>
+          </article>
+
+          <article class="panel chart-panel reveal">
+            <div class="section-heading">
+              <div>
+                <p class="eyebrow">Maintenance completion</p>
+                <h3>Completion Rate</h3>
+              </div>
+            </div>
+            <canvas id="maintenanceChart" height="260"></canvas>
+            <div class="chart-fallback" data-fallback="maintenanceChart"></div>
+          </article>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <nav class="mobile-bottom-nav" aria-label="Mobile quick navigation">
+    <a href="#overview"><span class="icon">dashboard</span><small>Ops</small></a>
+    <a href="#requests"><span class="icon">clipboard</span><small>Calls</small></a>
+    <a href="#dispatch"><span class="icon">route</span><small>Dispatch</small></a>
+    <a href="#analytics"><span class="icon">chart</span><small>Stats</small></a>
+  </nav>
+
+  <button class="fab" id="fabButton" type="button" aria-label="Create service call">
+    <span class="icon">plus</span>
+  </button>
+
+  <div class="modal-backdrop" id="serviceModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" hidden>
+    <article class="service-modal">
+      <button class="icon-button modal-close" id="closeModal" type="button" aria-label="Close service details">
+        <span class="icon">close</span>
+      </button>
+      <div id="modalContent"></div>
+    </article>
+  </div>
+
+  <div class="toast-stack" id="toastStack" aria-live="polite" aria-label="Notifications"></div>
+
+  <div class="section-loader" id="sectionLoader" aria-hidden="true">
+    <div class="loader-card">
+      <span></span>
+      <p>Syncing AirFlex operations...</p>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
