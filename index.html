@@ -46,9 +46,17 @@
           <span class="icon">clipboard</span>
           <span>Service Desk</span>
         </a>
+        <a href="#services" class="nav-link" data-section-link>
+          <span class="icon">wrench</span>
+          <span>Services</span>
+        </a>
         <a href="#dispatch" class="nav-link" data-section-link>
           <span class="icon">route</span>
           <span>Dispatch</span>
+        </a>
+        <a href="#agent" class="nav-link" data-section-link>
+          <span class="icon">spark</span>
+          <span>AI Agent</span>
         </a>
         <a href="#maintenance" class="nav-link" data-section-link>
           <span class="icon">shield</span>
@@ -114,10 +122,20 @@
                 <span class="icon">plus</span>
                 New Service Call
               </button>
+              <button class="secondary-button" id="bookEmergency" type="button">
+                <span class="icon">alert</span>
+                Book Emergency Repair
+              </button>
               <button class="secondary-button" id="exportReport" type="button">
                 <span class="icon">download</span>
                 Export Ops Report
               </button>
+            </div>
+            <div class="trust-strip" aria-label="AirFlex service highlights">
+              <span>24/7 emergency response</span>
+              <span>Commercial rooftop units</span>
+              <span>Residential furnace and AC</span>
+              <span>GTA and Durham coverage</span>
             </div>
           </div>
 
@@ -185,6 +203,83 @@
           </article>
         </section>
 
+        <section class="service-showcase reveal" id="services">
+          <article class="panel service-catalog-panel">
+            <div class="section-heading">
+              <div>
+                <p class="eyebrow">AirFlex HVAC services</p>
+                <h3>Bookable Service Catalog</h3>
+              </div>
+            </div>
+            <div class="service-grid" id="serviceGrid"></div>
+          </article>
+
+          <article class="panel estimate-panel">
+            <div class="section-heading">
+              <div>
+                <p class="eyebrow">Customer estimate</p>
+                <h3>Quick Quote Calculator</h3>
+              </div>
+            </div>
+            <div class="quote-form">
+              <label>
+                <span>Service</span>
+                <select id="quoteService"></select>
+              </label>
+              <label>
+                <span>Property</span>
+                <select id="quoteProperty">
+                  <option value="Residential">Residential</option>
+                  <option value="Commercial">Commercial</option>
+                </select>
+              </label>
+              <label>
+                <span>Urgency</span>
+                <select id="quoteUrgency">
+                  <option value="Scheduled">Scheduled</option>
+                  <option value="High">High priority</option>
+                  <option value="Emergency">Emergency</option>
+                </select>
+              </label>
+              <label>
+                <span>Distance from Scarborough</span>
+                <input id="quoteDistance" type="range" min="0" max="80" value="18">
+              </label>
+              <div class="quote-result">
+                <small>Estimated visit range</small>
+                <strong id="quoteTotal">$0</strong>
+                <span id="quoteMeta">Includes dispatch and diagnostic assumptions</span>
+              </div>
+              <button class="primary-button" id="createQuoteRequest" type="button">
+                <span class="icon">plus</span>
+                Create Quote Request
+              </button>
+            </div>
+          </article>
+        </section>
+
+        <section class="service-showcase secondary-showcase reveal">
+          <article class="panel plan-panel">
+            <div class="section-heading">
+              <div>
+                <p class="eyebrow">Maintenance memberships</p>
+                <h3>Service Plans</h3>
+              </div>
+            </div>
+            <div class="plan-grid" id="planGrid"></div>
+          </article>
+
+          <article class="panel equipment-panel">
+            <div class="section-heading">
+              <div>
+                <p class="eyebrow">Installed equipment</p>
+                <h3>Equipment Registry</h3>
+              </div>
+            </div>
+            <div class="equipment-list" id="equipmentList"></div>
+          </article>
+        </section>
+
         <section class="ops-grid">
           <article class="panel live-map reveal">
             <div class="section-heading">
@@ -207,6 +302,27 @@
             </div>
             <div class="activity-feed" id="activityFeed"></div>
           </article>
+
+          <article class="panel weather-panel reveal">
+            <div class="section-heading">
+              <div>
+                <p class="eyebrow">Live field conditions</p>
+                <h3>Scarborough Weather</h3>
+              </div>
+              <button class="mini-button" id="refreshWeather" type="button">Refresh</button>
+            </div>
+            <div class="weather-card" id="weatherCard">
+              <div>
+                <strong id="weatherTemp">--</strong>
+                <small id="weatherSummary">Loading current conditions</small>
+              </div>
+              <div class="weather-grid">
+                <span><small>Humidity</small><strong id="weatherHumidity">--</strong></span>
+                <span><small>Wind</small><strong id="weatherWind">--</strong></span>
+                <span><small>Updated</small><strong id="weatherUpdated">--</strong></span>
+              </div>
+            </div>
+          </article>
         </section>
 
         <section class="panel requests-panel reveal" id="requests">
@@ -217,7 +333,14 @@
             </div>
             <div class="request-actions">
               <span class="badge dispatch-badge" id="visibleRequestCount">0 visible</span>
+              <select id="sortFilter" aria-label="Sort service requests">
+                <option value="date">Sort by date</option>
+                <option value="priority">Sort by priority</option>
+                <option value="value">Sort by revenue</option>
+                <option value="customer">Sort by customer</option>
+              </select>
               <button class="secondary-button compact" id="clearFilters" type="button">Clear</button>
+              <button class="secondary-button compact" id="resetData" type="button">Reset Data</button>
             </div>
           </div>
 
@@ -247,6 +370,9 @@
               <option value="Residential">Residential</option>
               <option value="Maintenance">Maintenance</option>
             </select>
+            <select id="technicianFilter" aria-label="Filter by technician">
+              <option value="all">All technicians</option>
+            </select>
           </div>
 
           <div class="skeleton-table" id="tableSkeleton" aria-hidden="true">
@@ -254,6 +380,119 @@
           </div>
 
           <div class="request-list" id="requestList"></div>
+        </section>
+
+        <section class="ops-grid extended-options">
+          <article class="panel action-panel reveal">
+            <div class="section-heading">
+              <div>
+                <p class="eyebrow">Dispatcher tools</p>
+                <h3>Quick Actions</h3>
+              </div>
+            </div>
+            <div class="quick-actions">
+              <button class="secondary-button" id="showEmergencies" type="button"><span class="icon">alert</span> Emergencies</button>
+              <button class="secondary-button" id="showUnassigned" type="button"><span class="icon">users</span> Unassigned</button>
+              <button class="secondary-button" id="optimizeRoutes" type="button"><span class="icon">route</span> Optimize Routes</button>
+              <button class="secondary-button" id="closeCompleted" type="button"><span class="icon">check</span> Archive Completed</button>
+            </div>
+          </article>
+
+          <article class="panel inventory-panel reveal">
+            <div class="section-heading">
+              <div>
+                <p class="eyebrow">Parts and equipment</p>
+                <h3>Inventory Alerts</h3>
+              </div>
+            </div>
+            <div class="inventory-list" id="inventoryList"></div>
+          </article>
+
+          <article class="panel finance-panel reveal">
+            <div class="section-heading">
+              <div>
+                <p class="eyebrow">Billing snapshot</p>
+                <h3>Invoices</h3>
+              </div>
+            </div>
+            <div class="finance-list" id="financeList"></div>
+          </article>
+        </section>
+
+        <section class="ops-grid service-tools reveal">
+          <article class="panel customer-panel">
+            <div class="section-heading">
+              <div>
+                <p class="eyebrow">Customer portal</p>
+                <h3>Customer Communication</h3>
+              </div>
+            </div>
+            <div class="customer-tools">
+              <select id="customerRequestSelect" aria-label="Choose service call for customer actions"></select>
+              <button class="secondary-button" id="sendEta" type="button"><span class="icon">route</span> Send ETA</button>
+              <button class="secondary-button" id="sendReminder" type="button"><span class="icon">calendar</span> Send Reminder</button>
+              <button class="secondary-button" id="collectDeposit" type="button"><span class="icon">download</span> Collect Deposit</button>
+            </div>
+          </article>
+
+          <article class="panel appointment-panel">
+            <div class="section-heading">
+              <div>
+                <p class="eyebrow">Upcoming schedule</p>
+                <h3>Appointment Board</h3>
+              </div>
+            </div>
+            <div class="appointment-list" id="appointmentList"></div>
+          </article>
+
+          <article class="panel warranty-panel">
+            <div class="section-heading">
+              <div>
+                <p class="eyebrow">Equipment support</p>
+                <h3>Warranty Lookup</h3>
+              </div>
+            </div>
+            <div class="warranty-list" id="warrantyList"></div>
+          </article>
+        </section>
+
+        <section class="agent-workspace reveal" id="agent">
+          <article class="panel agent-panel">
+            <div class="section-heading">
+              <div>
+                <p class="eyebrow">Rule-based AI operations workflow</p>
+                <h3>AirFlex AI Operations Agent</h3>
+              </div>
+              <span class="badge online-badge">LLM-ready architecture</span>
+            </div>
+            <div class="agent-layout">
+              <div class="agent-actions" aria-label="AI agent actions">
+                <button class="primary-button" id="agentDailySummary" type="button"><span class="icon">spark</span> Daily Ops Summary</button>
+                <button class="secondary-button" id="agentRecommend" type="button">Recommend Assignments</button>
+                <button class="secondary-button" id="agentPrioritize" type="button">Prioritize Emergencies</button>
+                <button class="secondary-button" id="agentDraftEta" type="button">Draft ETA Message</button>
+                <button class="secondary-button" id="agentRisks" type="button">Detect Risks</button>
+                <button class="secondary-button" id="agentManagerReport" type="button">Manager Report</button>
+                <button class="secondary-button" id="agentApplyTop" type="button">Apply Top Assignment</button>
+              </div>
+              <div class="agent-output" id="agentOutput" role="status" aria-live="polite">
+                <p>Select an agent action to analyze the current operation board.</p>
+              </div>
+            </div>
+          </article>
+
+          <article class="panel notes-panel">
+            <div class="section-heading">
+              <div>
+                <p class="eyebrow">Portfolio notes</p>
+                <h3>Technical Notes</h3>
+              </div>
+            </div>
+            <div class="notes-list">
+              <p><strong>What this demonstrates:</strong> dynamic state-driven UI, local persistence, rule-based AI agent workflow, technician recommendation logic, operational risk detection, customer-message generation, and a clear path to backend or LLM API integration.</p>
+              <p><strong>Why this matters:</strong> an AI operations agent can reduce response time, prioritize emergencies, improve technician utilization, automate customer communication, and give managers real-time visibility.</p>
+            </div>
+          </article>
         </section>
 
         <section class="dispatch-grid" id="dispatch">
@@ -372,6 +611,7 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
+  <script src="agent-logic.js"></script>
   <script src="script.js"></script>
 </body>
 </html>
